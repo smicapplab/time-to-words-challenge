@@ -1,10 +1,10 @@
 // expecting time to be a string in the format like '8:15' or '12:30'
 
 /**
-  input time 00:00 a/p default : a 
-  time in words
-*/
+ Conditions: No need to validate, time is always valid in terms value and format
+ */
 
+// Integer to word hashmap 
 const numberToWords = {
   1: 'one',
   2: 'two',
@@ -37,6 +37,7 @@ const numberToWords = {
   29: 'twenty nine',
 }
 
+// Special cases for quarter and half past]
 const specialCase = {
   "15": "quarter past",
   "30": "half past",
@@ -44,7 +45,8 @@ const specialCase = {
 }
 
 function convertTimeToWords(time) {
-  // TODO: real code goes here!
+  
+  // First we handle midnight and midday which requires no parsing of time string
   if (time === "0:00") {
     return "midnight";
   }
@@ -53,44 +55,29 @@ function convertTimeToWords(time) {
     return "midday";
   }
 
+
+  // Extract hous and minutes from time string
   const timeSplit = time.split(":");
-  // const hour = parseInt(timeSplit[0])
-  // const min = parseInt(timeSplit[1])
   const hour = parseInt(timeSplit[0])
   const min = parseInt(timeSplit[1])
 
+  // If start of hour return hour and o'clock 
   if (min == "00") {
     return `${numberToWords[hour]} o'clock`
   }
 
-  if (specialCase[min]) {
-    // > 30
+  // Handle the special cases hald and quarter. 
+  if (specialCase[min]) { 
     return `${specialCase[min]} ${min === 45 ? numberToWords[hour + 1] : numberToWords[hour]}`
   }
 
-  if( min < 30 ){
+  // Rest of the case and staright conversion of time to words
+  if (min < 30) {
     return `${numberToWords[min]} past ${numberToWords[hour]}`
-  }else{
-    //'five to three'
-    return `${numberToWords[60-min]} to ${numberToWords[hour+1]}`
+  } else  {
+    return `${numberToWords[60 - min]} to ${numberToWords[hour + 1]}`
   }
 
-  //return 'half past eight';
 }
-
-const word = convertTimeToWords("2:00");
-console.log(word);
-
-const word1 = convertTimeToWords("2:15");
-console.log(word1);
-
-const word2 = convertTimeToWords("2:45");
-console.log(word2);
-
-const word3 = convertTimeToWords("2:05");
-console.log(word3);
-
-const word4 = convertTimeToWords("2:55");
-console.log(word4);
 
 module.exports = { convertTimeToWords };
